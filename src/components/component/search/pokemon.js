@@ -2,27 +2,35 @@ import React, {useContext, useEffect} from 'react';
 
 import {SearchContext} from '../../../context/search';
 import useInput from '../../../hooks/useInput';
-import {Alert} from 'react-bootstrap';
+import {Card, Alert} from 'react-bootstrap';
 
 function PokemonView() {
   const [search] = useContext(SearchContext);
-  const [image, setImage] = useInput('');
+  const [pokemon, setPokemon] = useInput('');
   useEffect(() => {
-    setImage('');
+    setPokemon('');
     if(search.pokemon){
       fetch('http://pokeapi.co/api/v2/pokemon/'+search.pokemon).then(res=> res.json())
-        .then(response => setImage(response.sprites.front_default))
+        .then(response => setPokemon(response))
         .catch(()=>{
-          setImage('Not Found');
+          setPokemon('Not Found');
         });
     }
-  },[search, setImage]);
+  },[search, setPokemon]);
   return (
     <div>
-      {image && (
-        <img src={image} alt='' />
+      {pokemon.sprites && (
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src={pokemon.sprites.front_default} />
+          <Card.Body>
+            <Card.Title>{pokemon.name}</Card.Title>
+            <Card.Text>
+              {`${pokemon.name} weight is ${pokemon.weight}`}
+            </Card.Text>
+          </Card.Body>
+        </Card>
       )}
-      {image === "Not Found" && (
+      {pokemon === "Not Found" && (
         <Alert variant='warning'>
           No Pokemon Found
         </Alert>
