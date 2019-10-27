@@ -10,7 +10,7 @@ function PokemonView() {
   useEffect(() => {
     setPokemon('');
     if(search.pokemon){
-      fetch('http://pokeapi.co/api/v2/pokemon/'+search.pokemon).then(res=> res.json())
+      fetch('https://pokeapi.co/api/v2/pokemon/'+search.pokemon).then(res=> res.json())
         .then(response => setPokemon(response))
         .catch(()=>{
           setPokemon('Not Found');
